@@ -53,7 +53,7 @@ Font Color tool supports these configuration parameters:
 
 | Field                      | Type        | Default                                       | Description                                        |
 | ---------------------------|-------------|-----------------------------------------------|----------------------------------------------------|
-| colors                     | `string[]`  | ['#009900', '#990000', '#000099', '#000000' ] | Available hex colors to choose from in popup.      |
+| colors                     | `string[]`  | ['#009900', '#990000', '#000099', '#000000' ] | Available hex colors to choose from in popup       |
 | iconColor                  | `string`    | '#009900'                                     | Hex color of button icon inside Inline Toolbox     | 
 | columnsCount               | `int`       | 4                                             | Number of columns in colors popup                  |
 | colorButton.borderRadius   | `string`    | '100%'                                        | Value of CSS border-radius property                |
