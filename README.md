@@ -13,13 +13,13 @@ Font Color Tool for coloring text-fragments for the [Editor.js](https://editorjs
 Get the package
 
 ```shell
-npm i --save-dev @editorjs/marker
+npm i --save-dev @editorjs/font-color
 ```
 
 Include module at your application
 
 ```javascript
-const Marker = require('@editorjs/marker');
+const FontColor = require('@editorjs/font-color');
 ```
 
 ### Download to your project's source dir
@@ -40,6 +40,24 @@ const editor = EditorJS({
     ...
     FontColor: {
       class: FontColor,
+      config: {
+        colors: [
+          '#009900',
+          '#990000',
+          '#000099',
+          '#000000',
+        ],
+        columnsCount: 4,
+        colorButton: {
+          width: 24,
+          height: 24,
+          spacingX: 8,
+          spacingY: 8,
+          borderRadius: '100%'
+        },
+        debug: false,
+        iconColor: '#009900'
+      }
     }
   },
   
