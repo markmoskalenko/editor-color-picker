@@ -42,21 +42,21 @@ class FontColor {
   // CSS CLASSES
 
   /**
-   * Class name for Inline Toolbar button's container
-   * 
-   * @type {string}
-   */
-  static get containerBaseClass() {
-    return 'cdx-font-color__container';
-  }
-
-  /**
    * Class name for color buttons from color popup
    * 
    * @type {string}
    */
   static get colorButtonClass() {
     return 'cdx-font-color__color-button';
+  }
+
+  /**
+   * Class name for color button that removes color
+   * 
+   * @type {string}
+   */
+  static get noColorButtonClass() {
+    return 'cdx-font-color__color-button_no-color';
   }
 
   /**
@@ -78,34 +78,34 @@ class FontColor {
   }
 
   /**
-   * Class name for popup with color buttons
+   * Class name for panel with color buttons
    *
    * @type {string}
    */
-  static get popupBaseClass() {
-    return FontColor.inlineBlockClass + '__popup';
+  static get panelBaseClass() {
+    return FontColor.inlineBlockClass + '__panel';
   }
 
   /**
-   * Class name for popup when hidden
-   *
+   * Class name for panel when hidden
+   * 
    * @type {string}
    */
-  static get hiddenPopupClass() {
-    return FontColor.popupBaseClass + '_hidden';
+  static get panelHiddenClass() {
+    return FontColor.panelBaseClass + '_hidden';
   }
 
   // END CSS CLASSES
 
   /**
-   * 
+   * Character separating colors in data attribute of style element
    */
   static get stylesDataAttributeColorSeparator() {
     return ';';
   }
 
   /**
-   * Data attribute applied on HTML style elements that were inserted by this class
+   * Data attribute applied on HTML style elements inserted by Font Color
    */
   static get stylesDataAttribute() {
     return 'data-editorjs_font_color_plugin';
@@ -169,11 +169,12 @@ class FontColor {
     this.debug = this.config.debug;
 
     /**
-     * Popup with colors
+     * Panel with color buttons
+     * Appears after the Inline Toolbar button has been clicked 
      * 
      * @type {HTMLElement|undefined}
      */
-    this.popup = undefined;
+    this.panel = undefined;
 
     /**
      * Last selected range
@@ -199,17 +200,27 @@ class FontColor {
   }
 
   /**
+   * Handle opening/closing of Inline Toolbar
+   */
+  clear() {
+    this.hidePanel();
+  }
+
+  /**
    * Create color button
    * 
    * Color button is a button from color popup.
    * When clicked, the button applies its background color to selected text.
    * 
-   * @param {string} color 
+   * @param {string|undefined} color 
    */
   createColorButton(color) {
     const button = document.createElement('button');
     button.classList.add(FontColor.colorButtonClass);
-    button.style.backgroundColor = color;
+    if (!color) {
+      button.classList.add(FontColor.noColorButtonClass);
+    }
+    button.style.backgroundColor = color || 'transparent';
     button.style.width = this.config.colorButton.width + 'px';
     button.style.height = this.config.colorButton.height + 'px';
     button.style.marginBottom = this.config.colorButton.spacingY + 'px';
@@ -247,30 +258,41 @@ class FontColor {
     const attrValue = this.config.colors.join(FontColor.stylesDataAttributeColorSeparator);
     styles.setAttribute(FontColor.stylesDataAttribute, attrValue);
     document.head.appendChild(styles);
-    this.haveColorClassesBeenCreated = true;
   }
 
   /**
    * Remove current color if exists and apply the new one
    * 
-   * @param {string} color 
+   * @param {string|undefined} color 
    */
   handleColorButtonClick(color) {
-    this.color = color;
-    if (this.range) {
-      const termWrapper = this.api.selection.findParentTag(this.tag, FontColor.inlineBlockClass);
-      if (this.debug) {
-        console.log('termWrapper: ', termWrapper);
-      }
-      if (termWrapper) {
-        this.unwrap(termWrapper);
-      }
-      this.wrap(this.range);
-    } else {
-      if (this.debug) {
-        console.warn('Color applied without range');
-      }
+    if (this.debug) {
+      console.log('clicked on color: ', color);
     }
+    this.color = color || 'inherit';
+    if (!this.range) {
+      if (this.debug) {
+        console.warn('Color applied without range: ', this.range);
+      }
+      return;
+    }
+    const termWrapper = this.api.selection.findParentTag(this.tag, FontColor.inlineBlockClass);
+    if (this.debug) {
+      console.log('termWrapper: ', termWrapper);
+    }
+    if (termWrapper) {
+      this.unwrap(termWrapper);
+    }
+    if (color) {
+      this.wrap(this.range);
+    }
+  }
+
+  /**
+   * Hide colors panel
+   */
+  hidePanel() {
+    this.panel.classList.toggle(FontColor.panelHiddenClass, true);
   }
 
   /**
@@ -279,46 +301,83 @@ class FontColor {
    * @return {HTMLElement}
    */
   render() {
-    const container = document.createElement('span');
-    container.classList.add(FontColor.containerBaseClass);
     this.button = document.createElement('button');
     this.button.type = 'button';
     this.button.classList.add(this.iconClasses.base);
-    this.popup = document.createElement('div');
-    const colorButtons = this.config.colors.map(color => this.createColorButton(color));
-    this.popup.classList.add(FontColor.popupBaseClass, FontColor.hiddenPopupClass);
-    this.popup.style.width = (this.config.columnsCount * (this.config.colorButton.width + this.config.colorButton.spacingX) + this.config.colorButton.spacingX) + 'px';
-    this.popup.style.paddingLeft = this.config.colorButton.spacingX + 'px';
-    this.popup.style.paddingTop = this.config.colorButton.spacingY + 'px';
-    this.popup.append(...colorButtons);
-    this.popup.tabIndex = 0;
-    this.popup.addEventListener('blur', () => {
-      this.popup.classList.toggle(FontColor.hiddenPopupClass, true);
-    });
-    container.appendChild(this.button);
-    container.appendChild(this.popup);
     const icon = document.createElement('b');
     icon.append('a');
     icon.style.color = this.config.iconColor;
     icon.classList.add(FontColor.iconClass);
     this.button.appendChild(icon);
-    return container;
+    this.button.addEventListener('click', () => this.panel.classList.toggle(FontColor.panelHiddenClass));
+    // need timeout 'couse but has not been rendered yet 
+    setTimeout(() => {
+      const siblings = [].filter.call(this.button.parentElement.children, child => this.button !== child);
+      // hide colors panel when another inline tool is clicked
+      siblings.forEach(sibling => sibling.addEventListener('click', () => this.hidePanel()));
+    }, 50);
+    return this.button;
   }
 
   /**
-   * Handle Inline Toolbar button click
+   * Create colors panel
    * 
-   * Show colors popup
+   * @returns {HTMLElement}
+   */
+  renderActions() {
+    this.panel = document.createElement('div');
+
+    /**
+     * Buttons for each color from config
+     * 
+     * @type {HTMLButtonElement[]}
+     */
+    const userColorButtons = this.config.colors
+      .map(color => this.createColorButton(color));
+
+    /**
+     * Button to remove color
+     * 
+     * @type {HTMLButtonElement}
+     */
+    const noColorButton = this.createColorButton();
+
+    const colorButtons = [
+      noColorButton,
+      ...userColorButtons
+    ];
+    this.panel.classList.add(FontColor.panelBaseClass, FontColor.panelHiddenClass);
+    this.panel.style.width = (this.config.columnsCount * (this.config.colorButton.width + this.config.colorButton.spacingX) + this.config.colorButton.spacingX) + 'px';
+    this.panel.style.paddingLeft = this.config.colorButton.spacingX + 'px';
+    this.panel.style.paddingTop = this.config.colorButton.spacingY + 'px';
+    this.panel.append(...colorButtons);
+    this.panel.tabIndex = 0;
+    //this.panel.addEventListener('blur', () => this.api.toolbar.close());
+    return this.panel;
+  }
+
+  /**
+   * Show colors panel
+   */
+  showPanel() {
+    this.panel.classList.toggle(FontColor.panelHiddenClass, false);
+  }
+
+  /**
+   * Handle selection
    *
    * @param {Range} range - selected fragment
    */
   surround(range) {
+    if (this.debug) {
+      console.log('surround: ', range);
+    }
     this.range = range;
     if (!range) {
       return;
     }
-    this.popup.classList.toggle(FontColor.hiddenPopupClass, false);
-    this.popup.focus();
+    //this.panel.classList.toggle(FontColor.panelHiddenClass, false);
+    //this.panel.focus();
   }
 
   /**
