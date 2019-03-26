@@ -54,9 +54,7 @@ const editor = EditorJS({
           spacingX: 8,
           spacingY: 8,
           borderRadius: '100%'
-        },
-        debug: false,
-        iconColor: '#009900'
+        }
       }
     }
   },
@@ -69,16 +67,20 @@ const editor = EditorJS({
 
 Font Color tool supports these configuration parameters:
 
-| Field                      | Type        | Default                                       | Description                                        |
-| ---------------------------|-------------|-----------------------------------------------|----------------------------------------------------|
-| colors                     | `string[]`  | ['#009900', '#990000', '#000099', '#000000' ] | Available hex colors to choose from in popup       |
-| iconColor                  | `string`    | '#009900'                                     | Hex color of button icon inside Inline Toolbox     | 
-| columnsCount               | `int`       | 4                                             | Number of columns in colors popup                  |
-| colorButton.borderRadius   | `string`    | '100%'                                        | Value of CSS border-radius property                |
-| colorButton.spacingX       | `int`       | 8                                             | Horizontal space between colors in popup in pixels |
-| colorButton.spacingY       | `int`       | 8                                             | Vertical space between colors in popup in pixels   |
-| colorButton.width          | `int`       | 24                                            | Width of color button in popup in pixels           |
-| colorButton.height         | `int`       | 24                                            | Height of color button in popup in pixels          |
+| Field                      | Type        | Default                                       | Description                                           |
+| ---------------------------|-------------|-----------------------------------------------|-------------------------------------------------------|
+| colors                     | `string[]`  | ['#009900', '#990000', '#000099', '#000000']  | Available hex colors to choose from in popup          |
+| columnsCount               | `int`       | 4                                             | Number of columns in colors popup                     |
+| colorButton.border         | `string`    | 'none'                                        | Value of CSS border property                          |
+| colorButton.borderRadius   | `string`    | '100%'                                        | Value of CSS border-radius property                   |
+| colorButton.spacingX       | `int`       | 8                                             | Horizontal space between colors in popup in pixels    |
+| colorButton.spacingY       | `int`       | 8                                             | Vertical space between colors in popup in pixels      |
+| colorButton.width          | `int`       | 24                                            | Width of color button in popup in pixels              |
+| colorButton.height         | `int`       | 24                                            | Height of color button in popup in pixels             |
+| noColorButton.border       | `string`    | '1px solid #e4e5e9'                           | Value of CSS border propery for button removing color |
+
+Button for removing color inherits CSS from color button. So if you set `noColorButton.border` to `undefined`, `colorButton.border` will be used insted.
+
 
 ## Output data
 
