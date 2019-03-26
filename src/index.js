@@ -20,11 +20,11 @@ const defaultConfig = {
     borderRadius: '4px',
     border: 'none',
     appliedColorIcon: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24"> <defs> <path id="cdx-font-color__icon-done%id%6" d="M8.689 15.637l-3.026-3.033L4 14.27l3.992 4.003.733.726L19.996 7.7 18.3 6z"/> </defs> <g fill="none" fill-rule="evenodd"> <mask id="cdx-font-color__icon-done4%id%" fill="#fff"> <use xlink:href="#cdx-font-color__icon-done%id%6"/> </mask> <use fill="#fff" fill-rule="nonzero" xlink:href="#cdx-font-color__icon-done%id%6"/> <g fill="#fff" mask="url(#cdx-font-color__icon-done4%id%)"> <path d="M0 0h24v24H0z"/> </g> </g></svg>',
-    noColorButton: {
-      border: '1px solid #e4e5e9',
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24"> <defs> <path id="cdx-font-color__icon-erasor%id%0" d="M10.999 16.286l3-3.429H7.142l-3 3.429h6.857zm9.044-9.616c.179.41.108.884-.187 1.223l-8 9.143c-.214.25-.527.393-.857.393H4.142c-.447 0-.858-.26-1.045-.67a1.156 1.156 0 0 1 .187-1.223l8-9.143c.215-.25.527-.393.858-.393h6.857c.446 0 .857.259 1.044.67z"/> </defs> <g fill="none" fill-rule="evenodd"> <mask id="cdx-font-color__icon-erasor2%id%" fill="#fff"> <use xlink:href="#cdx-font-color__icon-erasor%id%0"/> </mask> <use fill="#000" xlink:href="#cdx-font-color__icon-erasor%id%0"/> <g fill="currentColor" mask="url(#cdx-font-color__icon-erasor2%id%)"> <path d="M0 0h24v24H0z"/> </g> </g></svg>',
-      iconColor: '#556066'
-    }
+  },
+  noColorButton: {
+    border: '1px solid #e4e5e9',
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24"> <defs> <path id="cdx-font-color__icon-erasor%id%0" d="M10.999 16.286l3-3.429H7.142l-3 3.429h6.857zm9.044-9.616c.179.41.108.884-.187 1.223l-8 9.143c-.214.25-.527.393-.857.393H4.142c-.447 0-.858-.26-1.045-.67a1.156 1.156 0 0 1 .187-1.223l8-9.143c.215-.25.527-.393.858-.393h6.857c.446 0 .857.259 1.044.67z"/> </defs> <g fill="none" fill-rule="evenodd"> <mask id="cdx-font-color__icon-erasor2%id%" fill="#fff"> <use xlink:href="#cdx-font-color__icon-erasor%id%0"/> </mask> <use fill="#000" xlink:href="#cdx-font-color__icon-erasor%id%0"/> <g fill="currentColor" mask="url(#cdx-font-color__icon-erasor2%id%)"> <path d="M0 0h24v24H0z"/> </g> </g></svg>',
+    iconColor: '#556066'
   },
   debug: false,
   icon: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24"><path d="M19.022 6.224a.722.722 0 0 1 .216.531c0 .21-.072.387-.216.531L12.308 14l-2.07-2.07 6.714-6.714A.722.722 0 0 1 17.483 5c.21 0 .387.072.531.216l1.008 1.008zM8.726 13.262c.396 0 .768.102 1.116.306.348.204.624.48.828.828.204.348.306.72.306 1.116a2.88 2.88 0 0 1-.405 1.494c-.27.456-.633.819-1.089 1.089-.456.27-.957.405-1.503.405-.546 0-1.092-.138-1.638-.414A3.831 3.831 0 0 1 5 16.988c.228 0 .456-.057.684-.171.228-.114.414-.273.558-.477.156-.24.234-.516.234-.828 0-.396.102-.768.306-1.116.204-.348.48-.624.828-.828a2.17 2.17 0 0 1 1.116-.306z"></path></svg>'
@@ -265,9 +265,9 @@ class FontColor {
     button.style.border = this.config.colorButton.border;
     if (!color) {
       button.classList.add(FontColor.noColorButtonClass);
-      button.innerHTML = this.config.colorButton.noColorButton.icon.replace(/%id%/g, randomIdPart);
-      button.style.color = this.config.colorButton.noColorButton.iconColor;
-      const border = this.config.colorButton.noColorButton.border || this.config.colorButton.border;
+      button.innerHTML = this.config.noColorButton.icon.replace(/%id%/g, randomIdPart);
+      button.style.color = this.config.noColorButton.iconColor;
+      const border = this.config.noColorButton.border || this.config.colorButton.border;
       button.style.border = border;
     }
     button.addEventListener('click', () => this.handleColorButtonClick(color));
