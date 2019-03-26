@@ -2,27 +2,23 @@
   position: relative;
 }
 .cdx-font-color__color-button {
-  border: 1px solid #abcdef;
-  box-shadow: 0 1px 1px #091215;
+  border: none;
   cursor: pointer;
 }
+.cdx-font-color__color-button svg {
+  display: none;
+}
+.cdx-font-color__color-button_applied svg {
+  display: inline;
+}
 .cdx-font-color__color-button_no-color {
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
 }
-.cdx-font-color__color-button_no-color::before, .cdx-font-color__color-button_no-color::after {
-  position: absolute;
-  left: calc(50% - 1px);
-  top: 0px;
-  content: ' ';
-  height: 23px;
-  width: 2px;
-  background-color: #abcdef;
-}
-.cdx-font-color__color-button_no-color::before {
-  transform: rotate(45deg);
-}
-.cdx-font-color__color-button_no-color::after {
-  transform: rotate(-45deg);
+.cdx-font-color__color-button_no-color svg {
+  display: inline;
 }
 .cdx-font-color__icon {
   display: flex;
