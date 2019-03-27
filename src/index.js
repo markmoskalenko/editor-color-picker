@@ -164,8 +164,7 @@ class FontColor {
      * 
      * @see defaultConfig
      */
-    this.config = {...defaultConfig, config};
-
+    this.config = {...defaultConfig, ...config};
     /**
      * Selected font color
      * 
